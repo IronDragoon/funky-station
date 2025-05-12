@@ -1,11 +1,21 @@
 using Content.Shared.Access.Components;
+using Content.Shared.Administration.Logs;
 using Content.Shared.Audio;
+using Content.Shared.Database;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Labels.EntitySystems;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.CartridgeLoader.Cartridges;
 using Content.Shared._DV.NanoChat; // DeltaV
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Random;
+using Content.Shared.Paper;
+using Robust.Shared.Timing;
+using System.Text;
+using Content.Server.Labels;
+using Content.Shared.Labels.EntitySystems;
+
 
 namespace Content.Server.CartridgeLoader.Cartridges;
 
@@ -15,6 +25,12 @@ public sealed partial class LogProbeCartridgeSystem : EntitySystem // DeltaV - M
     [Dependency] private readonly CartridgeLoaderSystem? _cartridgeLoaderSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
     [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
+    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private readonly PaperSystem _paperSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly LabelSystem _labelSystem = default!;
 
     public override void Initialize()
     {
@@ -22,6 +38,7 @@ public sealed partial class LogProbeCartridgeSystem : EntitySystem // DeltaV - M
         InitializeNanoChat(); // DeltaV
         SubscribeLocalEvent<LogProbeCartridgeComponent, CartridgeUiReadyEvent>(OnUiReady);
         SubscribeLocalEvent<LogProbeCartridgeComponent, CartridgeAfterInteractEvent>(AfterInteract);
+        SubscribeLocalEvent<LogProbeCartridgeComponent, CartridgeMessageEvent>(OnMessage); // Wizden
     }
 
     /// <summary>
@@ -73,6 +90,50 @@ public sealed partial class LogProbeCartridgeSystem : EntitySystem // DeltaV - M
     private void OnUiReady(Entity<LogProbeCartridgeComponent> ent, ref CartridgeUiReadyEvent args)
     {
         UpdateUiState(ent, args.Loader);
+    }
+
+    /// <summary>
+    /// Adding code from Wizden for printing log probe entries
+    /// </summary>
+
+    private void OnMessage(Entity<LogProbeCartridgeComponent> ent, ref CartridgeMessageEvent args)
+    {
+        if (args is LogProbePrintMessage cast)
+            PrintLogs(ent, cast.User);
+    }
+
+    private void PrintLogs(Entity<LogProbeCartridgeComponent> ent, EntityUid user)
+    {
+        if (string.IsNullOrEmpty(ent.Comp.EntityName))
+            return;
+
+        if (_timing.CurTime < ent.Comp.NextPrintAllowed)
+            return;
+
+        ent.Comp.NextPrintAllowed = _timing.CurTime + ent.Comp.PrintCooldown;
+
+        var paper = Spawn(ent.Comp.PaperPrototype, _transform.GetMapCoordinates(user));
+        _labelSystem.Label(paper, ent.Comp.EntityName); // label it for easy identification
+
+        _audioSystem.PlayEntity(ent.Comp.PrintSound, user, paper);
+        _handsSystem.PickupOrDrop(user, paper, checkActionBlocker: false);
+
+        // generate the actual printout text
+        var builder = new StringBuilder();
+        builder.AppendLine(Loc.GetString("log-probe-printout-device", ("name", ent.Comp.EntityName)));
+        builder.AppendLine(Loc.GetString("log-probe-printout-header"));
+        var number = 1;
+        foreach (var log in ent.Comp.PulledAccessLogs)
+        {
+            var time = TimeSpan.FromSeconds(Math.Truncate(log.Time.TotalSeconds)).ToString();
+            builder.AppendLine(Loc.GetString("log-probe-printout-entry", ("number", number), ("time", time), ("accessor", log.Accessor)));
+            number++;
+        }
+
+        var paperComp = Comp<PaperComponent>(paper);
+        _paperSystem.SetContent((paper, paperComp), builder.ToString());
+
+        _adminLogger.Add(LogType.EntitySpawn, LogImpact.Low, $"{ToPrettyString(user):user} printed out LogProbe logs ({paper}) of {ent.Comp.EntityName}");
     }
 
     private void UpdateUiState(Entity<LogProbeCartridgeComponent> ent, EntityUid loaderUid)

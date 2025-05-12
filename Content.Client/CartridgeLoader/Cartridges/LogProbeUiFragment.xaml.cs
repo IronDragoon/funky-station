@@ -11,9 +11,13 @@ namespace Content.Client.CartridgeLoader.Cartridges;
 [GenerateTypedNameReferences]
 public sealed partial class LogProbeUiFragment : BoxContainer
 {
+    public Action? OnPrintPressed; // Wizden - Enabling logprob printing
+
     public LogProbeUiFragment()
     {
         RobustXamlLoader.Load(this);
+
+        PrintButton.OnPressed += _ => OnPrintPressed?.Invoke();
     }
 
     // DeltaV begin - Update to handle both types of data
