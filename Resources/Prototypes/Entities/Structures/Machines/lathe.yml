@@ -465,6 +465,7 @@
     - GrenadeEMP
     - GrenadeFlash
     - HoloprojectorSecurity
+    - IncendiaryPayload
     - MagazineBoxLightRifleIncendiary
     - MagazineBoxLightRifleUranium
     - MagazineBoxMagnumIncendiary
@@ -935,6 +936,7 @@
     - GrenadeEMP
     - GrenadeFlash
     - HoloprojectorSecurity
+    - IncendiaryPayload
     - MagazineBoxLightRifleIncendiary
     - MagazineBoxLightRifleUranium
     - MagazineBoxMagnumIncendiary

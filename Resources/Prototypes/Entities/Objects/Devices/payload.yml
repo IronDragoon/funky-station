@@ -100,3 +100,31 @@
     - type: EmitSoundOnTrigger
       sound:
         path: "/Audio/Effects/flash_bang.ogg"
+
+- type: entity
+  name: incendiary payload
+  parent: BasePayload
+  id: IncendiaryPayload
+  description: An incendiary payload, will produce flaming pellets in all directions.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/payload.rsi
+    state: payload-incendiary-armed
+  - type: ProjectileGrenade
+    fillPrototype: PelletClusterIncendiary
+    capacity: 30
+  - type: ExplodeOnTrigger
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 25
+      behaviors:
+      - !type:ExplodeBehavior
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
