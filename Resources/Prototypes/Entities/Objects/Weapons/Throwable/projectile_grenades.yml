@@ -109,10 +109,10 @@
     parent: [ ProjectileGrenadeBase, BaseSecurityContraband ]
     id: GrenadeBiohazard
     name: biohazard grenade
-    description: Designed for fighting Type 5 and higher biohazard threats
+    description: A miniaturised incendiary grenade, designed for fighting Type 5 and higher biohazard threats. Has a longer timer to allow crew to move away after priming
     components:
     - type: Sprite
-      sprite: Objects/Weapons/Grenades/pyrogrenade.rsi
+      sprite: Objects/Weapons/Grenades/biohazard.rsi
       layers:
       - state: icon
         map: [ "enum.TriggerVisualLayers.Base" ]
