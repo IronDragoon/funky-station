@@ -81,3 +81,18 @@
     layers:
       - state: box_security
       - state: forensic
+
+- type: entity
+  name: biohazard grenade box
+  parent: BoxCardboard
+  id: BoxBiohazardGrenade
+  description: 'WARNING: These devices may only be used in case of a Biohazard Level 5 or higher outbreak.'
+  components:
+  - type: StorageFill
+    contents:
+    - id: GrenadeBiohazard
+      amount: 4
+  - type: Sprite
+    layers:
+    - state: box_security
+    - state: biohazard_grenade

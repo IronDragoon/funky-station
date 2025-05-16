@@ -118,7 +118,6 @@
   - TimerTrigger
   - FlashPayload
   - ExplosivePayload
-  - IncendiaryPayload
   - ChemicalPayload
 
 - type: technology

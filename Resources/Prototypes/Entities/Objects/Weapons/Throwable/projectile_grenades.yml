@@ -105,28 +105,28 @@
     sound:
       path: "/Audio/Weapons/Guns/Gunshots/batrifle.ogg"
 
-  - type: entity
-    parent: [ ProjectileGrenadeBase, BaseSecurityContraband ]
-    id: GrenadeBiohazard
-    name: biohazard grenade
-    description: A miniaturised incendiary grenade, designed for fighting Type 5 and higher biohazard threats. Has a longer timer to allow crew to move away after priming
-    components:
-    - type: Sprite
-      sprite: Objects/Weapons/Grenades/biohazard.rsi
-      layers:
-      - state: icon
-        map: [ "enum.TriggerVisualLayers.Base" ]
-    - type: ProjectileGrenade
-      fillPrototype: PelletClusterIncendiary
-      capacity: 15
-    - type: OnUseTimerTrigger
-      beepSound:
-        path: "/Audio/Effects/beep1.ogg"
-        params:
-          volume: 5
-      initialBeepDelay: 0
-      beepInterval: 1
-      delay: 6
-    - type: EmitSoundOnTrigger
-      sound:
-        path: "/Audio/Weapons/Guns/Gunshots/batrifle.ogg"
+- type: entity
+  parent: [ ProjectileGrenadeBase, BaseSecurityContraband ]
+  id: GrenadeBiohazard
+  name: biohazard grenade
+  description: A miniaturised incendiary grenade, designed for fighting Type 5 and higher biohazard threats. Has a longer timer to allow crew to move away after arming
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/biohazard.rsi
+    layers:
+    - state: icon
+      map: [ "enum.TriggerVisualLayers.Base" ]
+  - type: ProjectileGrenade
+    fillPrototype: PelletClusterIncendiary
+    capacity: 30
+  - type: OnUseTimerTrigger
+    beepSound:
+      path: "/Audio/Effects/beep_landmine.ogg"
+      params:
+        volume: 5
+    initialBeepDelay: 0
+    beepInterval: 0.5
+    delay: 10
+  - type: EmitSoundOnTrigger
+    sound:
+      path: "/Audio/Weapons/Guns/Gunshots/batrifle.ogg"
