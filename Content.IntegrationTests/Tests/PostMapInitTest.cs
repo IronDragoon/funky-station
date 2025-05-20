@@ -40,7 +40,10 @@ namespace Content.IntegrationTests.Tests
         private static readonly string[] Grids =
         {
             "/Maps/centcomm.yml",
-            "/Maps/_Harmony/centcomm.yml", // Funky, Harmony CC version
+            "/Maps/_Harmony/centcomm.yml", // Funky, CC version
+            "/Maps/Shuttles/cargo.yml",
+            "/Maps/Shuttles/emergency.yml",
+            "/Maps/Shuttles/infiltrator.yml",
             AdminTestArenaSystem.ArenaMapPath
         };
 
@@ -48,6 +51,7 @@ namespace Content.IntegrationTests.Tests
         {
             "/Maps/centcomm.yml",
             "/Maps/_Harmony/centcomm.yml", // Funky, Harmony CC version
+            "/Maps/_Harmony/eclipse.yml", // Harmony Map - Contains Matter Dematerializer and svalinn shuttle guns.
         };
 
         private static readonly string[] GameMaps =
@@ -91,6 +95,7 @@ namespace Content.IntegrationTests.Tests
             "Convex",
             "Relic",
             "Resort",
+            "Eclipse", //Harmony, Developed by Lachryphage, ported by IronDragoon
             "dm01-entryway"
         };
 
