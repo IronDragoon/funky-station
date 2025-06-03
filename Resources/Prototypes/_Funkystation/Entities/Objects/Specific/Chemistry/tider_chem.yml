@@ -28,3 +28,40 @@
     - state: beaker_makeshift1
       map: [ "enum.SolutionContainerLayers.Fill" ]
       visible: false
+  - type: Construction
+    graph: MakeshiftBeaker
+    node: makeshiftBeaker
+
+- type: constructionGraph
+  id: MakeshiftBeaker
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: makeshiftBeaker
+      conditions:
+      - !type:SolutionEmpty
+        solution: drink
+      steps:
+      - tag: DrinkCan # any normal drink can
+        name: an empty can
+        icon:
+          sprite: Objects/Consumable/Drinks/cola.rsi
+          state: icon_open
+        amount: 1
+        doAfter: 3
+  - node: makeshiftBeaker
+    entity: MakeshiftBeaker
+
+- type: construction
+  name: Makeshift Beaker
+  id: MakeshiftBeaker
+  graph: MakeshiftBeaker
+  startNode: start
+  targetNode: makeshiftBeaker
+  category: construction-category-tools
+  objectType: Item
+  description: A crappy container for a little amount of fluids
+  icon:
+    sprite: _Funkystation/Objects/Specific/Chemistry/beaker_makeshift.rsi
+    state: beaker_makeshift
