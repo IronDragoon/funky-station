@@ -521,7 +521,6 @@
     - Syringe
     - Trash
 
-
 - type: entity
   name: pill
   parent: BaseItem

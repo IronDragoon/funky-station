@@ -1,0 +1,30 @@
+﻿- type: entity
+  name: makeshift beaker
+  parent: BaseBeakerMetallic
+  description: Quick to cobble together, but only holds a small amount of chems
+  id: MakeshiftBeaker
+  components:
+  - type: Spillable
+    solution: beaker
+  - type: StaticPrice
+    price: 10
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 25
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    fillBaseName: beaker_makeshift
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 25
+  - type: Item
+    size: Small
+    sprite: _Funkystation/Objects/Specific/Chemistry/beaker_makeshift.rsi
+  - type: Sprite
+    sprite: _Funkystation/Objects/Specific/Chemistry/beaker_makeshift.rsi
+    layers:
+    - state: beaker_makeshift
+    - state: beaker_makeshift1
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+      visible: false
